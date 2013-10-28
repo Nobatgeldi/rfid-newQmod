@@ -121,6 +121,7 @@ public:
 	void send_query_reply_update_slot();
 	void start_edfsa();
 	void start_estimationDFSA();
+	void start_estimationBTSA();
 	void resolve_collisions();
 	void calculate_next_Q(int col, int suc, int method, int rep);
 	int eomlee(float error, int col, int suc, int rep);
