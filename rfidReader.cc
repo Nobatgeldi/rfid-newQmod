@@ -93,7 +93,8 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
 {
-  if (argc == 2) {
+	printf("%s\n", argv[1]);
+ 	if (argc == 2) {
 	    if (strcmp(argv[1], "query-tags") == 0) {
 	      resend();
 	      return (TCL_OK);
@@ -202,6 +203,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   	hdr_ip* hdrip = hdr_ip::access(pkt);
   	// Access the RfidReader header for the received packet:
   	hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
+  	printf("BABACA!!!!");
   	if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_TRACKING)) { 
 	  	if (hdr->ack_==1) {
 			//Send confirmation ACK
@@ -238,6 +240,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 		tagEPC_=hdr->tagEPC_;
 		tagIP_=hdrip->saddr();
 		rng16_=hdr->rng16_;
+		printf("BTSA!!!!!!!!");
 		if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
 			if (debug_==1) printf("Tag [%d] identified\n",hdr->tagEPC_);
 			counter_=0;
