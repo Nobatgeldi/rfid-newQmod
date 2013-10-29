@@ -49,7 +49,7 @@
  * File: Header File for a new 'RfidReader' Agent Class for the ns
  *       network simulator
  * Author: Rafael Perazzo Barbosa Mota (perazzo@ime.usp.br), Setembro 2012
- *
+ * Modified: Bruno Nunes Leal Faria (bnlf@ime.usp.br), Outubro 2013
  */
 
 
