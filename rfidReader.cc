@@ -93,7 +93,8 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
 {
-  if (argc == 2) {
+	printf("%s\n", argv[1]);
+ 	if (argc == 2) {
 	    if (strcmp(argv[1], "query-tags") == 0) {
 	      resend();
 	      return (TCL_OK);
@@ -238,6 +239,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 		tagEPC_=hdr->tagEPC_;
 		tagIP_=hdrip->saddr();
 		rng16_=hdr->rng16_;
+		printf("BTSA!!!!!!!!");
 		if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
 			if (debug_==1) printf("Tag [%d] identified\n",hdr->tagEPC_);
 			counter_=0;
@@ -631,7 +633,8 @@ void RfidReaderAgent::start_est() {
 		}
 		else if ((collisions_==estConstant_)) { //All collisions
 			//printf("Entrou collisions!!\n");			
-			if (rebuttal_==0) {			
+			if (rebuttal_==0) 
+			{			
 				reset_est(); //decrease Q				
 				update_Q(1);
 				send_query_estimate();	//Restart
@@ -889,8 +892,7 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
                 col_timer_.resched(t2_); //Wait for tags responses      
             }
         }
-	}
-	else {
+    } else {
 		if (rep!=0) 
 		{ //Resolving collisions
 			uniqCounter_=slotNumber_+1;
@@ -930,7 +932,7 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_edfsa();
 	}
 	else if (a_->operation_==4) { //Estimation and singularization
-		//a_->start_estimationDFSA();
+		// a_->start_estimationDFSA();
 		a_->start_estimationBTSA();
 	}
 }
