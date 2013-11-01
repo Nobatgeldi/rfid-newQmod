@@ -203,7 +203,6 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   	hdr_ip* hdrip = hdr_ip::access(pkt);
   	// Access the RfidReader header for the received packet:
   	hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  	printf("BABACA!!!!");
   	if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_TRACKING)) { 
 	  	if (hdr->ack_==1) {
 			//Send confirmation ACK
@@ -886,9 +885,6 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
                                 col_timer_.resched(t2_); //Wait for tags responses      
                         }
                 }
-
-
-
 	}
 	else {
 		if (rep!=0) { //Resolving collisions
@@ -902,7 +898,6 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
 			
 		}
 	}
-
 }
 
 int RfidReaderAgent::eomlee(float error, int col, int suc, int rep) {
@@ -932,10 +927,8 @@ void RetransmitTimer::expire(Event *e) {
 	else if (a_->operation_==2) { //Estimation and singularization
 		a_->start_edfsa();
 	}
-	else if (a_->operation_==3) { //Estimation and singularization
-		a_->start_estimationDFSA();
-	}
 	else if (a_->operation_==4) { //Estimation and singularization
+		// a_->start_estimationDFSA();
 		a_->start_estimationBTSA();
 	}
 }
