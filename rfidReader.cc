@@ -814,39 +814,45 @@ void RfidReaderAgent::resolve_collisions() {
 
 void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
 
-	if (col>0) {
-		if (method==0) { //LOWER BOUND
-			
-			if (rep==0) {	//STANDARD DFSA		
+	if (col>0) 
+	{
+		if (method==0) 
+		{ //LOWER BOUND
+			if (rep==0) 
+			{	//STANDARD DFSA		
 				qValue_=(2*col);				
 				query(RC_QUERY,uniqCounter_,rep);
 				rs_timer_.resched(t2_); //Wait for tags responses			
 			}
-			else { //Proposed Algorithm
+			else 
+			{ //Proposed Algorithm
 				subQValue_=2*col;				
 				query(RC_QUERY,subSlotNumber_,rep);
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
 		}
-		else if (method==1) { //SCHOUTE
-			
-			if (rep==0) {	//STANDARD DFSA
+		else if (method==1) 
+		{ //SCHOUTE
+			if (rep==0) 
+			{	//STANDARD DFSA
 				qValue_=round(2.39*col);
 				query(RC_QUERY,uniqCounter_,rep);
 				rs_timer_.resched(t2_); //Wait for tags responses			
 			}
-			else { //Proposed Algorithm				
+			else 
+			{ //Proposed Algorithm
 				subQValue_=round(2.39*col);				
 				query(RC_QUERY,subSlotNumber_,rep);
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
 		}
-		else if (method==2) { //EOM-LEE
-                        
-                        if (rep==0) {	//STANDARD DFSA		
+		else if (method==2) 
+		{ //EOM-LEE
+            if (rep==0) 
+            {	//STANDARD DFSA		
 				qValue_=eomlee(0.0001,col,suc,0); 				
 				query(RC_QUERY,uniqCounter_,rep);
-				rs_timer_.resched(t2_); //Wait for tags responses			
+				rs_timer_.resched(t2_); //Wait for tags responses
 			}
 			else { //Proposed Algorithm
 				subQValue_=eomlee(0.0001,col,suc,rep); 				
@@ -854,52 +860,46 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
 				query(RC_QUERY,subSlotNumber_,rep);
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
-                }
-		else if (method==3) { //2.45
-
-                        if (rep==0) {   //STANDARD DFSA         
-                                qValue_=2.45*col;
-                                query(RC_QUERY,uniqCounter_,rep);
-                                rs_timer_.resched(t2_); //Wait for tags responses
-                        }
-                        else { //Proposed Algorithm
-                                subQValue_=2.45*col; 
-                                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
-                                query(RC_QUERY,subSlotNumber_,rep);
-                                col_timer_.resched(t2_); //Wait for tags responses      
-                        }
-                }
-		else if (method==4) { //2.62
-
-                        if (rep==0) {   //STANDARD DFSA         
-                                qValue_=2.62*col;
-                                query(RC_QUERY,uniqCounter_,rep);
-                                rs_timer_.resched(t2_); //Wait for tags responses
-                        }
-                        else { //Proposed Algorithm
-                                subQValue_=2.62*col; 
-                                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
-                                query(RC_QUERY,subSlotNumber_,rep);
-                                col_timer_.resched(t2_); //Wait for tags responses      
-                        }
-                }
-
-
-
+        }
+		else if (method==3) 
+		{ //2.45
+            if (rep==0) {   //STANDARD DFSA         
+                qValue_=2.45*col;
+                query(RC_QUERY,uniqCounter_,rep);
+                rs_timer_.resched(t2_); //Wait for tags responses
+            }
+            else { //Proposed Algorithm
+                subQValue_=2.45*col; 
+                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+                query(RC_QUERY,subSlotNumber_,rep);
+                col_timer_.resched(t2_); //Wait for tags responses      
+            }
+        }
+		else if (method==4) 
+		{ //2.62
+            if (rep==0) {   //STANDARD DFSA         
+                qValue_=2.62*col;
+                query(RC_QUERY,uniqCounter_,rep);
+                rs_timer_.resched(t2_); //Wait for tags responses
+            }
+            else { //Proposed Algorithm
+                subQValue_=2.62*col; 
+                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+                query(RC_QUERY,subSlotNumber_,rep);
+                col_timer_.resched(t2_); //Wait for tags responses      
+            }
+        }
 	}
 	else {
-		if (rep!=0) { //Resolving collisions
+		if (rep!=0) 
+		{ //Resolving collisions
 			uniqCounter_=slotNumber_+1;
 			counter_=0;	
 			//printf("Voltando para o DFSA no slot (%d)\n",uniqCounter_);
 			query(RC_SING,uniqCounter_,0);			
 			rs_timer_.resched(t2_);
 		}
-		else { //Normal DFSA operation
-			
-		}
 	}
-
 }
 
 int RfidReaderAgent::eomlee(float error, int col, int suc, int rep) {
@@ -929,10 +929,8 @@ void RetransmitTimer::expire(Event *e) {
 	else if (a_->operation_==2) { //Estimation and singularization
 		a_->start_edfsa();
 	}
-	else if (a_->operation_==3) { //Estimation and singularization
-		a_->start_estimationDFSA();
-	}
 	else if (a_->operation_==4) { //Estimation and singularization
+		//a_->start_estimationDFSA();
 		a_->start_estimationBTSA();
 	}
 }
