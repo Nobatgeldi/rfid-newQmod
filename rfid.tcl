@@ -1,4 +1,4 @@
-# Define options
+# Define option
 #if {$argc!=1} {
 #        puts "Error! Number of nodes missing!"
 #        exit
@@ -16,7 +16,7 @@ set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
-set val(stop) 100 ;# time of simulation end
+set val(stop) 60 ;# time of simulation end
 
 set ns [new Simulator]
 set tracefd [open [lindex $argv 0] w]
@@ -58,7 +58,7 @@ $ns node-config -adhocRouting $val(rp) \
 #-channel $chan_1_
 
 for {set i 0} {$i < $val(nn) } { incr i } {
-	set n($i) [$ns node] 
+  set n($i) [$ns node] 
 }
 
 # Provide initial location of mobilenodes..
@@ -92,19 +92,23 @@ $ns at 0.0 "$n(0) label LEITOR"
 set reader1 [new Agent/RfidReader]
 for {set i 1} {$i < $val(nn) } { incr i } {
         set tag($i) [new Agent/RfidTag]
-	$tag($i) set tagEPC_ [expr $i*10]
-	$tag($i) set time_ 1
-	$tag($i) set messages_ 0
-	$tag($i) set seed_ [$rng2 uniform 10 1000]
+  $tag($i) set tagEPC_ [expr $i*10]
+  $tag($i) set time_ 1
+  $tag($i) set messages_ 0
+  $tag($i) set seed_ [$rng2 uniform 10 1000]
 }
 
 #Definindo parametros dos agentes
 $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 4
-$reader1 set t2_ 0.001
+$reader1 set t2_ 0.003
 $reader1 set c_ 0.3
+$reader1 set qValue_ 4
+$reader1 set Qfp_ 4.0
+$reader1 set estConstant_ 3
 $reader1 set messages_ 0
+$reader1 set estMethod_ 5
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {
@@ -121,7 +125,8 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 }
 
 for {set i 0} {$i < $val(stop) } { incr i 101} {
-        $ns at $i "$reader1 standard-query-tags"
+        #$ns at $i "$reader1 standard-query-tags"
+  $ns at $i "$reader1 estimation-btsa"
 }
 
 #$ns at 1.0 "$reader1 query-tags"
@@ -129,8 +134,8 @@ for {set i 0} {$i < $val(stop) } { incr i 101} {
 # Define node initial position in nam
 $ns initial_node_pos $n(0) 20
 for {set i 1} {$i < $val(nn)} { incr i } {
-	# 30 defines the node size for nam
-	$ns initial_node_pos $n($i) 5
+  # 30 defines the node size for nam
+  $ns initial_node_pos $n($i) 5
 }
 
 # dynamic destination setting procedure..
@@ -153,10 +158,10 @@ proc destination {} {
       set now [$ns now]
       for {set i 1} {$i<$val(nn)} {incr i} {
             set rand1 [$rng1 uniform 0 20]
-	    set rand2 [$rng1 uniform 0 20]
+      set rand2 [$rng1 uniform 0 20]
             set xx [$rng1 uniform 0 $rand1]
             set yy [$rng1 uniform 0 $rand2]
-	    set zz [$rng1 uniform 0 2]
+      set zz [$rng1 uniform 0 2]
             $ns at $now "$n($i) setdest $xx $yy $zz"
       }
       $ns at [expr $now+$time] "destination"

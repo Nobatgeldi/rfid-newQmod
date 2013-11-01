@@ -174,7 +174,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	    }
 	    else if (strcmp(argv[1], "estimation-btsa") == 0) 
 	    { //ESTIMATION + BTSA
-			operation_=4;	
+			operation_=5;	
 			estCounter_=1;
 			bigQ_=qValue_;
 			collisions_=0;
@@ -892,6 +892,21 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
                 col_timer_.resched(t2_); //Wait for tags responses      
             }
         }
+        else if (method==5) 
+		{ //EBTSA
+			if (rep==0) 
+			{	//STANDARD BTSA
+				qValue_=round(2*col);
+				query(RC_QUERY,uniqCounter_,rep);
+				rs_timer_.resched(t2_); //Wait for tags responses			
+			}
+			else 
+			{ //EBTSA
+				subQValue_=round(2*col);				
+				query(RC_QUERY,subSlotNumber_,rep);
+				col_timer_.resched(t2_); //Wait for tags responses	
+			}
+		}
     } else {
 		if (rep!=0) 
 		{ //Resolving collisions
@@ -932,7 +947,9 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_edfsa();
 	}
 	else if (a_->operation_==4) { //Estimation and singularization
-		// a_->start_estimationDFSA();
+		a_->start_estimationDFSA();
+	}
+	else if (a_->operation_==5) { //Estimation and singularization
 		a_->start_estimationBTSA();
 	}
 }
