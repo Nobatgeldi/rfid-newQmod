@@ -101,7 +101,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 #Definindo parametros dos agentes
 $reader1 set id_ 200
 $reader1 set singularization_ 0
-$reader1 set service_ 5
+$reader1 set service_ 3
 $reader1 set t2_ 0.003
 $reader1 set c_ 0.3
 $reader1 set qValue_ 4
