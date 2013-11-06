@@ -174,7 +174,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	    }
 	    else if (strcmp(argv[1], "estimation-btsa") == 0) 
 	    { //ESTIMATION + BTSA
-			operation_=5;	
+			operation_=4;	
 			estCounter_=1;
 			bigQ_=qValue_;
 			collisions_=0;
@@ -183,7 +183,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 			session_++;
 			slotCounter_=0;
 			total_=0;
-			uniqCounter_=1; // Back to this later
+			uniqCounter_=0; // Back to this later
 			slotEstCounter_=0;
 			rebuttal_=0;
 			send_query_estimate();
@@ -239,7 +239,6 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 		tagEPC_=hdr->tagEPC_;
 		tagIP_=hdrip->saddr();
 		rng16_=hdr->rng16_;
-		printf("BTSA!!!!!!!!");
 		if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
 			if (debug_==1) printf("Tag [%d] identified\n",hdr->tagEPC_);
 			counter_=0;
@@ -895,14 +894,14 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
         else if (method==5) 
 		{ //EBTSA
 			if (rep==0) 
-			{	//STANDARD BTSA
-				qValue_=round(2*col);
+			{	//STANDARD		
+				qValue_=(2*col);				
 				query(RC_QUERY,uniqCounter_,rep);
 				rs_timer_.resched(t2_); //Wait for tags responses			
 			}
 			else 
-			{ //EBTSA
-				subQValue_=round(2*col);				
+			{ 
+				subQValue_=2*col;				
 				query(RC_QUERY,subSlotNumber_,rep);
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
