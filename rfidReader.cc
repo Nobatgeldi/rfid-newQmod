@@ -893,6 +893,7 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
         }
         else if (method==5) 
 		{ //EBTSA
+			printf("calculando next q");
 			if (rep==0) 
 			{	//STANDARD		
 				qValue_=(2*col);				
@@ -946,9 +947,6 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_edfsa();
 	}
 	else if (a_->operation_==4) { //Estimation and singularization
-		a_->start_estimationDFSA();
-	}
-	else if (a_->operation_==5) { //Estimation and singularization
 		a_->start_estimationBTSA();
 	}
 }
