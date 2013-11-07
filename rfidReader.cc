@@ -743,21 +743,21 @@ void RfidReaderAgent::start_estimationBTSA() {
 	uniqCounter_++; //next slot
 	//printf("Slot numero (%d)\n",uniqCounter_-1);
 	if (counter_==0) { //IDLE
-		//printf("Slot %d : IDLE\n",uniqCounter_-1);
+		printf("Slot %d : IDLE\n",uniqCounter_-1);
 		idle_++;
     }
     if (counter_==1) { //SUCCESS
-        //printf("Slot %d : SUCCESS\n",uniqCounter_-1);
+        printf("Slot %d : SUCCESS\n",uniqCounter_-1);
 		success_++;
 		suc_++;
 		send_query_reply();
     }
 	if (counter_>1) { //COLLISION
-  		//printf("Colisoes: %d\n", counter_);
+  		printf("Colisoes: %d\n", counter_);
 		fprintf(fp,"%d\n",counter_);
 		collisions_++;
 		//RESOLVE COLLISIONS
-		//printf("Resolvendo colisao do slot (%d)\n",uniqCounter_-1);		
+		printf("Resolvendo colisao do slot (%d)\n",uniqCounter_-1);		
 		slotNumber_=uniqCounter_-1;
 		uniqCounter_=qValue_+1;
 		subQValue_=initialFrameSize_;
