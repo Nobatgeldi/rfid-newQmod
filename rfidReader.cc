@@ -741,7 +741,8 @@ void RfidReaderAgent::start_estimationDFSA() {
 void RfidReaderAgent::start_estimationBTSA() {
 	slotCounter_++;
 	uniqCounter_++; //next slot
-	//printf("Slot numero (%d)\n",uniqCounter_-1);
+	printf("Slot numero (%d)\n",uniqCounter_-1);
+	printf("%d", counter_);
 	if (counter_==0) { //IDLE
 		printf("Slot %d : IDLE\n",uniqCounter_-1);
 		idle_++;
@@ -947,7 +948,6 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_edfsa();
 	}
 	else if (a_->operation_==4) { //Estimation and singularization
-		printf("entrou estimation");
 		a_->start_estimationBTSA();
 	}
 }
