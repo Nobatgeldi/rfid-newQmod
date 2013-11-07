@@ -179,6 +179,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 			bigQ_=qValue_;
 			collisions_=0;
 			idle_=0;
+			debug_=1;
 			success_=0;
 			session_++;
 			slotCounter_=0;
