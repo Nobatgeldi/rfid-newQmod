@@ -947,7 +947,7 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_edfsa();
 	}
 	else if (a_->operation_==4) { //Estimation and singularization
-		print("entrou estimation");
+		printf("entrou estimation");
 		a_->start_estimationBTSA();
 	}
 }
