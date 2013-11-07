@@ -199,6 +199,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 
 void RfidReaderAgent::recv(Packet* pkt, Handler*)
 {
+	printf("recebeu algo");
   	// Access the IP header for the received packet:
   	hdr_ip* hdrip = hdr_ip::access(pkt);
   	// Access the RfidReader header for the received packet:
