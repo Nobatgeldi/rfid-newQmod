@@ -267,6 +267,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			}
 		}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(state_!=T_ACKNOWLEDGED)) {
+			printf("(TAG IDENTIFIED) [%d] state(%d): slot value : %d\n",tagEPC_,state_,slot_);
 			state_=T_ACKNOWLEDGED;
 		}
 
@@ -298,7 +299,7 @@ void RfidTagAgent::updateSlot2() {
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
 	}
-        if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
+    printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }
 
 void RfidTagAgent::sendPacket(Packet* pkt, int command) {
