@@ -56,7 +56,6 @@
 #include "rfidReader.h"
 #include "rfidPacket.h"
 #include <time.h>
-#include <random.h>
 #include <math.h>
 static class RfidReaderClass : public TclClass {
 public:
@@ -331,15 +330,15 @@ void RfidReaderAgent::finish_start(int dest, int method) {
 		finish(dest);
 	}
 	else if (method==3) {
-		printf("Q = %d\nSlots = %d\n",qValue_,slotEstCounter_);
+		// printf("Q = %d\nSlots = %d\n",qValue_,slotEstCounter_);
 		//Proposed Algorithm Start
 		service_=4;
 		estMethod_=backlog_;
 		operation_=4;
 		slotCounter_=slotEstCounter_;
 		qValue_=round(pow(2,qValue_)*frameMultiplier_);
-		printf("Iniciando contagem em: %d\n",slotCounter_);
-		printf("Estimativa: (%d)\n",qValue_);
+		// printf("Iniciando contagem em: %d\n",slotCounter_);
+		// printf("Estimativa: (%d)\n",qValue_);
 		query(RC_QUERY,uniqCounter_,0);
 		rs_timer_.resched(t2_); //Wait for tags responses
 	}
@@ -348,15 +347,15 @@ void RfidReaderAgent::finish_start(int dest, int method) {
 void RfidReaderAgent::send_query_estimate() {
 
 	Packet* pkt = allocpkt(); 
-	//Create network header
-	hdr_ip* ipHeader = HDR_IP(pkt);
-	//Create RFID header
-	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-	//Prepating headers
-	rfidHeader->id_ = id_; //Reader ID
-	rfidHeader->tipo_ = FLOW_RT; //flow direction
-	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-	rfidHeader->service_=service_;
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
 	rfidHeader->command_=RC_EST;
 	rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
@@ -367,102 +366,102 @@ void RfidReaderAgent::send_query_estimate() {
 	rfidHeader->session_=session_;
 	rfidHeader->trace_=trace_;
 	rfidHeader->mechanism_=mechanism_;
-	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-	ipHeader->saddr() = here_.addr_; //Source: reader ip
-	ipHeader->sport() = here_.port_;
-	//Sends the packet
-	send(pkt, (Handler*) 0);
+        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        ipHeader->sport() = here_.port_;
+        //Sends the packet
+        send(pkt, (Handler*) 0);
 	//Packet::free(pkt);
 
 }
 
 void RfidReaderAgent::send_query_ajust() {
 
-	Packet* pkt = allocpkt();
-	//Create network header
-	hdr_ip* ipHeader = HDR_IP(pkt);
-	//Create RFID header
-	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-	//Prepating headers
-	rfidHeader->id_ = id_; //Reader ID
-	rfidHeader->tipo_ = FLOW_RT; //flow direction
-	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-	rfidHeader->service_=service_;
+        Packet* pkt = allocpkt();
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
 	rfidHeader->command_=RC_QUERYADJUST;
-	rfidHeader->qValue_=qValue_;
+        rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
 	rfidHeader->slotCounter_=slotCounter_;
 	rfidHeader->colCounter_=collisions_;
-	rfidHeader->idlCounter_=idle_;
-	rfidHeader->sucCounter_=success_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
 	rfidHeader->session_=session_;
 	rfidHeader->trace_=trace_;
 	rfidHeader->mechanism_=mechanism_;
-	if (debug_) printf("New qValue=%i\n",rfidHeader->qValue_);
+        if (debug_) printf("New qValue=%i\n",rfidHeader->qValue_);
 	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-	ipHeader->dport() = ipHeader->sport();
-	ipHeader->saddr() = here_.addr_; //Source: reader ip
-	ipHeader->sport() = here_.port_;
-	//Sends the packet
-	send(pkt, (Handler*) 0);
+        ipHeader->dport() = ipHeader->sport();
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        ipHeader->sport() = here_.port_;
+        //Sends the packet
+        send(pkt, (Handler*) 0);
 }
 
 void RfidReaderAgent::send_query_reply() {
 
-	Packet* pkt = allocpkt(); 
-	//Create network header
+        Packet* pkt = allocpkt(); 
+        //Create network header
 	hdr_ip* ipHeader = HDR_IP(pkt);
-	//Create RFID header
+        //Create RFID header
 	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-	//Prepating headers
-	rfidHeader->id_ = id_; //Reader ID
-	rfidHeader->tipo_ = FLOW_RT; //flow direction
-	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-	rfidHeader->service_=service_;
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
 	rfidHeader->command_=RC_QUERYREPLY;
-	rfidHeader->qValue_=qValue_;
+        rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=tagEPC_;
 	rfidHeader->rng16_=rng16_;
 	rfidHeader->slotCounter_=slotCounter_;
 	rfidHeader->colCounter_=collisions_;
-	rfidHeader->idlCounter_=idle_;
-	rfidHeader->sucCounter_=success_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
 	rfidHeader->session_=session_;
 	rfidHeader->trace_=trace_;
 	rfidHeader->mechanism_=mechanism_;
-	//ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-	ipHeader->daddr() = tagIP_; //Destination: Identified tag
-	ipHeader->saddr() = here_.addr_; //Source: reader ip
-	//Sends the packet
+        //ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->daddr() = tagIP_; //Destination: Identified tag
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        //Sends the packet
 	send(pkt, (Handler*) 0);
 }
 
 void RfidReaderAgent::send_query_reply_update_slot() {
 
-	Packet* pkt = allocpkt(); 
-	//Create network header
-	hdr_ip* ipHeader = HDR_IP(pkt);
-	//Create RFID header
-	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-	//Prepating headers
-	rfidHeader->id_ = id_; //Reader ID
-	rfidHeader->tipo_ = FLOW_RT; //flow direction
-	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-	rfidHeader->service_=service_;
-	rfidHeader->command_=RC_QUERYREPLY;
-	rfidHeader->qValue_=qValue_;
-	rfidHeader->tagEPC_=IP_BROADCAST;
+        Packet* pkt = allocpkt(); 
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
+        rfidHeader->command_=RC_QUERYREPLY;
+        rfidHeader->qValue_=qValue_;
+        rfidHeader->tagEPC_=IP_BROADCAST;
 	rfidHeader->slotCounter_=slotCounter_;
 	rfidHeader->colCounter_=collisions_;
-	rfidHeader->idlCounter_=idle_;
-	rfidHeader->sucCounter_=success_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
 	rfidHeader->session_=session_;
 	rfidHeader->trace_=trace_;
 	rfidHeader->mechanism_=mechanism_;
-	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-	ipHeader->saddr() = here_.addr_; //Source: reader ip
-	//Sends the packet
-	send(pkt, (Handler*) 0); 
+        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        //Sends the packet
+        send(pkt, (Handler*) 0); 
 }
 
 void RfidReaderAgent::start_sing() {
@@ -580,6 +579,7 @@ void RfidReaderAgent::check_rebuttal() {
 
 void RfidReaderAgent::start_est() {
 	slotEstCounter_++;
+	// printf("Q atual: %f\n", Qfp_);
 	if (counter_==0) { //idle
 		idle_++;
         }
@@ -592,7 +592,7 @@ void RfidReaderAgent::start_est() {
         }
 	estCounter_++;
 	if (estCounter_==(estConstant_+1)) {
-		//printf("Col: %d\n Idl: %d\n Suc: %d\n",collisions_,idle_,success_);		
+		// printf("Col: %d\n Idl: %d\n Suc: %d\n",collisions_,idle_,success_);		
 		if ((idle_==estConstant_)) { //All idle			
 			if (rebuttal_==0) {						
 				reset_est(); //decrease Q				
@@ -606,7 +606,7 @@ void RfidReaderAgent::start_est() {
 			}
 		}
 		else if ((collisions_==estConstant_)) { //All collisions
-			//printf("Entrou collisions!!\n");			
+			// printf("Entrou collisions!!\n");			
 			if (rebuttal_==0) {			
 				reset_est(); //decrease Q				
 				update_Q(1);
@@ -619,7 +619,7 @@ void RfidReaderAgent::start_est() {
 			}
 		}
 		else if ((collisions_<estConstant_)&&(idle_<estConstant_)) {
-			//printf("Entrou outro!!\n");	
+			// printf("Entrou outro!!\n");	
 			if (rebuttal_==0) {						
 				finalQ_=Qfp_;
 				//Rebuttal 
@@ -645,17 +645,17 @@ void RfidReaderAgent::start_edfsa() {
 	slotCounter_++;
 	uniqCounter_++; //next slot
 	if (counter_==0) { //IDLE
-		//printf("Slot %d : IDLE\n",uniqCounter_-1);
+		printf("Slot %d : IDLE\n",uniqCounter_-1);
 		idle_++;
         }
         if (counter_==1) { //SUCCESS
-                //printf("Slot %d : SUCCESS(%d)\n",uniqCounter_-1,tagEPC_);
+            printf("Slot %d : SUCCESS(%d)\n",uniqCounter_-1,tagEPC_);
 		success_++;
 		suc_++;
 		send_query_reply();
         }
 	if (counter_>1) { //COLLISION
-      		//printf("Slot %d : COLLISION\n",uniqCounter_-1);
+      		printf("Slot %d : COLLISION\n",uniqCounter_-1);
 		collisions_++;
         }
 	if (uniqCounter_<=qValue_) {
@@ -678,23 +678,23 @@ void RfidReaderAgent::start_edfsa() {
 void RfidReaderAgent::start_estimationDFSA() {
 	slotCounter_++;
 	uniqCounter_++; //next slot
-	printf("Slot numero (%d)\n",uniqCounter_-1);
+	//printf("Slot numero (%d)\n",uniqCounter_-1);
 	if (counter_==0) { //IDLE
-		printf("Slot %d : IDLE\n",uniqCounter_-1);
-		idle_++;
+			// printf("Slot %d : IDLE\n",uniqCounter_-1);
+			idle_++;
     }
     if (counter_==1) { //SUCCESS
-        printf("Slot %d : SUCCESS\n",uniqCounter_-1);
+        // printf("Slot %d : SUCCESS\n",uniqCounter_-1);
 		success_++;
 		suc_++;
 		send_query_reply();
     }
 	if (counter_>1) { //COLLISION
-  		printf("Colisoes: %d\n", counter_);
+      	// printf("Colisoes: %d\n", counter_);
 		fprintf(fp,"%d\n",counter_);
 		collisions_++;
 		//RESOLVE COLLISIONS
-		printf("Resolvendo colisao do slot (%d)\n",uniqCounter_-1);		
+		// printf("Resolvendo colisao do slot (%d)\n",uniqCounter_-1);		
 		slotNumber_=uniqCounter_-1;
 		uniqCounter_=qValue_+1;
 		subQValue_=initialFrameSize_;
@@ -752,7 +752,6 @@ void RfidReaderAgent::resolve_collisions() {
 }
 
 void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
-	printf("method: %d\n", method);
 	if (col>0) {
 		if (method==0) { //LOWER BOUND
 			
@@ -780,64 +779,73 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
 		}
-		// else if (method==2) { //EOM-LEE
-  //           if (rep==0) {	//STANDARD DFSA		
-		// 		qValue_=eomlee(0.0001,col,suc,0); 				
-		// 		query(RC_QUERY,uniqCounter_,rep);
-		// 		rs_timer_.resched(t2_); //Wait for tags responses			
-		// 	}
-		// 	else { //Proposed Algorithm
-		// 		subQValue_=eomlee(0.0001,col,suc,rep); 				
-		// 		//printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
-		// 		query(RC_QUERY,subSlotNumber_,rep);
-		// 		col_timer_.resched(t2_); //Wait for tags responses	
-		// 	}
-  //       }
-		else if (method==2) {
-            if (rep==0) {	
-				subQValue_=(2.45*col);
+		// proposed Bruno Faria
+		// 2013.2
+		else if (method==2) { 
+            if (rep==0) {		
+				subQValue_=col;
 				query(RC_QUERY,uniqCounter_,rep);
-				rs_timer_.resched(t2_); //Wait for tags responses			
+				rs_timer_.resched(t2_); 			
 			}
-			else { //Proposed Algorithm CUI
-				subQValue_=Random::uniform(initialFrameSize_, initialFrameSize_+1); 				
-				//printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+			else { 
+				if(col>1)
+					subQValue_=col;				
+				else
+					subQValue_=col+1;
 				query(RC_QUERY,subSlotNumber_,rep);
 				col_timer_.resched(t2_); //Wait for tags responses	
 			}
         }
+   //      else if (method==2) { //EOM-LEE
+   //          if (rep==0) {	//STANDARD DFSA		
+			// 	qValue_=eomlee(0.0001,col,suc,0); 				
+			// 	query(RC_QUERY,uniqCounter_,rep);
+			// 	rs_timer_.resched(t2_); //Wait for tags responses			
+			// }
+			// else { //Proposed Algorithm
+			// 	subQValue_=eomlee(0.0001,col,suc,rep); 				
+			// 	//printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+			// 	query(RC_QUERY,subSlotNumber_,rep);
+			// 	col_timer_.resched(t2_); //Wait for tags responses	
+			// }
+   //      }
 		else if (method==3) { //2.45
-            if (rep==0) {   //STANDARD DFSA   
-                    qValue_=2.45*col;
-                    query(RC_QUERY,uniqCounter_,rep);
-                    rs_timer_.resched(t2_); //Wait for tags responses
-            }
-            else { //Proposed Algorithm
-                    subQValue_=2.45*col; 
-                    //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
-                    query(RC_QUERY,subSlotNumber_,rep);
-                    col_timer_.resched(t2_); //Wait for tags responses      
-            }
-        }
+
+                        if (rep==0) {   //STANDARD DFSA         
+                                qValue_=2.45*col;
+                                query(RC_QUERY,uniqCounter_,rep);
+                                rs_timer_.resched(t2_); //Wait for tags responses
+                        }
+                        else { //Proposed Algorithm
+                                subQValue_=2.45*col; 
+                                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+                                query(RC_QUERY,subSlotNumber_,rep);
+                                col_timer_.resched(t2_); //Wait for tags responses      
+                        }
+                }
 		else if (method==4) { //2.62
-            if (rep==0) {   //STANDARD DFSA         
-                    qValue_=2.62*col;
-                    query(RC_QUERY,uniqCounter_,rep);
-                    rs_timer_.resched(t2_); //Wait for tags responses
-            }
-            else { //Proposed Algorithm
-                    subQValue_=2.62*col; 
-                    //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
-                    query(RC_QUERY,subSlotNumber_,rep);
-                    col_timer_.resched(t2_); //Wait for tags responses      
-            }
-        }
+
+                        if (rep==0) {   //STANDARD DFSA         
+                                qValue_=2.62*col;
+                                query(RC_QUERY,uniqCounter_,rep);
+                                rs_timer_.resched(t2_); //Wait for tags responses
+                        }
+                        else { //Proposed Algorithm
+                                subQValue_=2.62*col; 
+                                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+                                query(RC_QUERY,subSlotNumber_,rep);
+                                col_timer_.resched(t2_); //Wait for tags responses      
+                        }
+                }
+
+
+
 	}
 	else {
 		if (rep!=0) { //Resolving collisions
 			uniqCounter_=slotNumber_+1;
 			counter_=0;	
-			//printf("Voltando para o DFSA no slot (%d)\n",uniqCounter_);
+			// printf("Voltando para o DFSA no slot (%d)\n",uniqCounter_);
 			query(RC_SING,uniqCounter_,0);			
 			rs_timer_.resched(t2_);
 		}

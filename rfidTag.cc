@@ -174,14 +174,14 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			id_=hdr->id_;
 			state_=T_ACKNOWLEDGED;
 			slot_--;
-		        if (debug_) printf("(TAG IDENTIFIED) [%d] state(%d): slot value : %d\n",tagEPC_,state_,slot_);
+		        printf("(TAG IDENTIFIED) [%d] state(%d): slot value : %d\n",tagEPC_,state_,slot_);
 			sendPacket(pkt,TC_REPLY);
 	  	}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)&&(slot_>0)) {
 			id_=hdr->id_;
 			if (state_!=T_ACKNOWLEDGED) {
 				slot_=slot_-1;
-			        if (debug_) printf("tag [%d] updated slot to (%d)\n",tagEPC_,slot_);
+			        printf("tag [%d] updated slot to (%d)\n",tagEPC_,slot_);
 				if (slot_==0) {
                 	                state_=T_REPLY;
                         	        sendPacket(pkt,RC_QUERYREPLY);
@@ -267,7 +267,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			}
 		}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(state_!=T_ACKNOWLEDGED)) {
-			printf("(TAG IDENTIFIED) [%d] state(%d): slot value : %d\n",tagEPC_,state_,slot_);
+			// printf("(TAG IDENTIFIED) [%d] state(%d) slot value : %d\n",tagEPC_,state_,slot_);
 			state_=T_ACKNOWLEDGED;
 		}
 
@@ -299,7 +299,7 @@ void RfidTagAgent::updateSlot2() {
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
 	}
-    printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
+        // printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }
 
 void RfidTagAgent::sendPacket(Packet* pkt, int command) {
