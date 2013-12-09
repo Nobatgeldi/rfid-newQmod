@@ -1,4 +1,3 @@
-
 /*
  * rfidReader.cc
  * Copyright (C) 2000 by the University of Southern California
@@ -50,7 +49,7 @@
  *       network simulator
  * Author: Rafael Perazzo Barbosa Mota (perazzo@ime.usp.br), Setembro 2012
  * Links para pagina e epcglobal 
- *Last update: 30/JAN/2012
+ * Updated: Bruno Faria, Nov 2013
  */
 
 #include "rfidReader.h"
@@ -146,6 +145,8 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	return (TCL_OK);
     }
 
+    // Updated Bruno Faria 2013.2
+    // Proposed
     else if (strcmp(argv[1], "estimation-dfsa-query") == 0) { //Proposed Algortithm
 	operation_=3;	
 	estCounter_=1;
