@@ -11,8 +11,8 @@ An improved Q algorithm mod for ns2.35 based on RFID ns-2 module
 
 ### Run ###
 
-rfid_est.tcl <results_file> <number_of_nodes>
 
-> $ ns rfid_est.tcl tracer.thr 101
-  
+    ns rfid_est.tcl <results_file> <number_of_nodes+1>
+
+	$ ns rfid_est.tcl tracer.thr 101
   
